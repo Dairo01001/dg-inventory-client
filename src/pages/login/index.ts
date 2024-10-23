@@ -1,2 +1,2 @@
-export * from './login';
-export * from './schema/login.schema';
+export * from './login'
+export * from './schema/login.schema'
