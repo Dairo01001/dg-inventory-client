@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { lazy, Suspense } from 'react'
+import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Loading, ThemeProvider } from './components'
+import { Loading, PrivateLayout, ThemeProvider } from './components'
+import store from './redux/store'
 
 axios.defaults.baseURL = 'http://localhost:3000'
 
@@ -11,12 +13,16 @@ export default function App() {
   return (
     <ThemeProvider>
       <Suspense fallback={<Loading />}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Loading />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route element={<PrivateLayout />}>
+                <Route path="/" element={<Loading />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </Provider>
       </Suspense>
     </ThemeProvider>
   )

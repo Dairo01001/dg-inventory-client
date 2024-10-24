@@ -9,8 +9,11 @@ import {
   FormMessage,
   Input
 } from '@/components'
+import { useAppDispatch } from '@/hooks'
+import { createUserSession } from '@/redux/states'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import z from 'zod'
 import { loginSchema } from './schema'
 
@@ -22,15 +25,29 @@ export const Login = () => {
       password: ''
     }
   })
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const onSubmit = (data: z.infer<typeof loginSchema>) => {
-    console.log(data)
+    dispatch(
+      createUserSession({
+        user: {
+          id: '1',
+          name: 'John Doe',
+          email: data.email,
+          role: 'ADMIN'
+        },
+        accessToken: '123',
+        isAuthenticated: true
+      })
+    )
+    navigate('/')
   }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-8 py-12">
-      <div className="min-h-96 rounded-lg bg-gray-50 p-5 shadow-sm sm:mx-auto sm:w-full sm:max-w-md">
-        <h1 className="mb-12 mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+      <div className="min-h-96 rounded-lg p-5 shadow-sm sm:mx-auto sm:w-full sm:max-w-md">
+        <h1 className="mb-12 mt-6 text-center text-3xl font-bold tracking-tight">
           DG Inventory
         </h1>
         <Form {...form}>
